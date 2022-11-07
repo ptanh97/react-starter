@@ -1,4 +1,4 @@
-import { createContext, useContext, useReducer, useState } from 'react';
+import { useReducer, useState } from 'react';
 
 interface Task {
   id: number;
@@ -11,13 +11,8 @@ interface Action {
   [key: string]: any;
 }
 
-const TaskContext = createContext(null);
-const TaskDispatchContext = createContext(null);
-let nextTaskId = 3;
-
-const AddTask = () => {
+const AddTask = ({ onAddTask }) => {
   const [text, setText] = useState('');
-  const dispatch = useContext(TaskDispatchContext);
 
   return (
     <>
@@ -29,11 +24,7 @@ const AddTask = () => {
       <button
         onClick={() => {
           setText('');
-          dispatch({
-            type: 'added',
-            id: nextTaskId++,
-            text,
-          });
+          onAddTask(text);
         }}
       >
         Add
@@ -42,23 +33,20 @@ const AddTask = () => {
   );
 };
 
-const TaskList = () => {
-  const tasks = useContext(TaskContext);
-
+const TaskList = ({ tasks, onChangeTask, onDeleteTask }) => {
   return (
     <ul>
       {tasks.map((task: Task) => (
         <li key={task.id}>
-          <Task task={task} />
+          <Task task={task} onChange={onChangeTask} onDelete={onDeleteTask} />
         </li>
       ))}
     </ul>
   );
 };
 
-const Task = ({ task }) => {
+const Task = ({ task, onChange, onDelete }) => {
   const [isEditing, setIsEditing] = useState(false);
-  const dispatch = useContext(TaskDispatchContext);
 
   return (
     <label>
@@ -66,12 +54,9 @@ const Task = ({ task }) => {
         type="checkbox"
         checked={task.done}
         onChange={(e) => {
-          dispatch({
-            type: 'changed',
-            task: {
-              ...task,
-              done: e.target.checked,
-            },
+          onChange({
+            ...task,
+            done: e.target.checked,
           });
         }}
       />
@@ -80,12 +65,9 @@ const Task = ({ task }) => {
           <input
             value={task.text}
             onChange={(e) => {
-              dispatch({
-                type: 'changed',
-                task: {
-                  ...task,
-                  text: e.target.value,
-                },
+              onChange({
+                ...task,
+                text: e.target.value,
               });
             }}
           />
@@ -97,16 +79,7 @@ const Task = ({ task }) => {
           <button onClick={() => setIsEditing(true)}>Edit</button>
         </>
       )}
-      <button
-        onClick={() => {
-          dispatch({
-            type: 'deleted',
-            taskId: task.id,
-          });
-        }}
-      >
-        Delete
-      </button>
+      <button onClick={() => onDelete(task.id)}>Delete</button>
     </label>
   );
 };
@@ -117,10 +90,12 @@ export const TaskApp = () => {
     { id: 1, text: 'Watch a puppet show', done: false },
     { id: 2, text: 'Lennon Wall pic', done: false },
   ];
+  let nextTaskId = 3;
 
-  const tasksReducer = (tasks: Task[], action: Action) => {
+  // const [tasks, setTasks] = useState(initialTasks);
+  const [tasks, dispatch] = useReducer((tasks: Task[], action: Action) => {
     switch (action.type) {
-      case 'added':
+      case 'added': {
         return [
           ...tasks,
           {
@@ -129,26 +104,62 @@ export const TaskApp = () => {
             done: false,
           },
         ];
-      case 'changed':
+      }
+      case 'changed': {
         return tasks.map((task) =>
           task.id === action.task.id ? action.task : task
         );
-      case 'deleted':
+      }
+      case 'deleted': {
         return tasks.filter((task) => task.id !== action.taskId);
-      default:
+      }
+      default: {
         throw Error('Unknown action: ' + action.type);
+      }
     }
+  }, initialTasks);
+
+  const handleAddTask = (text: string) => {
+    // setTasks([
+    //   ...tasks,
+    //   {
+    //     id: nextTaskId++,
+    //     text: text,
+    //     done: false,
+    //   },
+    // ]);
+    dispatch({
+      type: 'added',
+      id: nextTaskId++,
+      text,
+    });
   };
 
-  const [tasks, dispatch] = useReducer(tasksReducer, initialTasks);
+  const handleChangeTask = (task: Task) => {
+    // setTasks(tasks.map((t) => (t.id === task.id ? task : t)));
+    dispatch({
+      type: 'changed',
+      task,
+    });
+  };
+
+  const handleDeleteTask = (taskId: number) => {
+    // setTasks(tasks.filter((t) => t.id !== taskId));
+    dispatch({
+      type: 'deleted',
+      taskId,
+    });
+  };
 
   return (
-    <TaskContext.Provider value={tasks}>
-      <TaskDispatchContext.Provider value={dispatch}>
-        <h1>Prague itinerary</h1>
-        <AddTask />
-        <TaskList />
-      </TaskDispatchContext.Provider>
-    </TaskContext.Provider>
+    <>
+      <h1>Prague itinerary</h1>
+      <AddTask onAddTask={handleAddTask} />
+      <TaskList
+        tasks={tasks}
+        onChangeTask={handleChangeTask}
+        onDeleteTask={handleDeleteTask}
+      />
+    </>
   );
 };

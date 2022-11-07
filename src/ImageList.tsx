@@ -1,5 +1,4 @@
-import { useContext, useState } from 'react';
-import { ImageSizeContext } from './Context';
+import { createContext, useContext, useState } from 'react';
 
 interface Place {
   id: number;
@@ -59,6 +58,8 @@ const places: Place[] = [
     imageId: 'ZfQOOzf',
   },
 ];
+
+const ImageSizeContext = createContext(500);
 
 export const ImageList = () => {
   const [isLarge, setIsLarge] = useState(false);

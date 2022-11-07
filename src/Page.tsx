@@ -1,10 +1,12 @@
 /* eslint-disable no-console */
-import { useContext } from 'react';
-import { LevelContext } from './Context';
+import { createContext, useContext } from 'react';
+
+const LevelContext = createContext(0);
 
 export const Section = ({ children }) => {
   const level = useContext(LevelContext);
   console.log('Section', level);
+
   return (
     <section className="section">
       <LevelContext.Provider value={level + 1}>
@@ -17,6 +19,7 @@ export const Section = ({ children }) => {
 export const Heading = ({ children }) => {
   const level = useContext(LevelContext);
   console.log('Heading', level);
+
   switch (level) {
     case 0:
       throw Error('Heading must be inside a Section!');
