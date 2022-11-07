@@ -1,8 +1,6 @@
 import React from 'react';
 import ReactDOM from 'react-dom/client';
 import { ImageList } from './ImageList';
-import { Page } from './Page';
-import { TaskApp } from './TaskApp';
 
 ReactDOM.createRoot(document.getElementById('root')).render(
   <React.StrictMode>
@@ -29,8 +27,8 @@ ReactDOM.createRoot(document.getElementById('root')).render(
   <PackingList /> */}
     {/* <SyncedInputs />
     <Scoreboard /> */}
-    <TaskApp />
-    <Page />
+    {/* <TaskApp />
+    <Page /> */}
     <ImageList />
   </React.StrictMode>
 );
