@@ -3,6 +3,8 @@
   "author": "Anh Phan <phanlong315@gmail.com>",
   "private": true,
   "dependencies": {
+    "@ant-design/icons": "^4.7.0",
+    "antd": "^4.24.1",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
     "react-scripts": "^5.0.1"

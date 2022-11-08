@@ -1,7 +1,7 @@
+import 'antd/dist/antd.min.css';
 import React from 'react';
 import ReactDOM from 'react-dom/client';
-import { ImageList } from './ImageList';
-import { TaskApp } from './TaskApp';
+import { Login } from './Login';
 
 ReactDOM.createRoot(document.getElementById('root')).render(
   <React.StrictMode>
@@ -29,7 +29,8 @@ ReactDOM.createRoot(document.getElementById('root')).render(
     {/* <SyncedInputs />
     <Scoreboard /> */}
     {/* <Page /> */}
-    <TaskApp />
-    <ImageList />
+    {/* <TaskApp />
+    <ImageList /> */}
+    <Login />
   </React.StrictMode>
 );
