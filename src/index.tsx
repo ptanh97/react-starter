@@ -2,6 +2,7 @@ import 'antd/dist/antd.min.css';
 import React from 'react';
 import ReactDOM from 'react-dom/client';
 import { Chat } from './Chat';
+import { Form } from './Form';
 import './index.css';
 
 ReactDOM.createRoot(document.getElementById('root')).render(
@@ -35,5 +36,6 @@ ReactDOM.createRoot(document.getElementById('root')).render(
     {/* <Login /> */}
     {/* <VideoPlayer /> */}
     <Chat />
+    <Form />
   </React.StrictMode>
 );
