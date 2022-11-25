@@ -4,6 +4,7 @@ import ReactDOM from 'react-dom/client';
 import { Chat } from './Chat';
 import { Form } from './Form';
 import './index.css';
+import { VideoPlayer } from './VideoPlayer';
 
 ReactDOM.createRoot(document.getElementById('root')).render(
   <React.StrictMode>
@@ -37,5 +38,6 @@ ReactDOM.createRoot(document.getElementById('root')).render(
     {/* <VideoPlayer /> */}
     <Chat />
     <Form />
+    <VideoPlayer />
   </React.StrictMode>
 );
